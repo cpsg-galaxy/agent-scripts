@@ -14,11 +14,12 @@ set -o pipefail
 
 sudo echo "$2	appd-controller" | sudo tee --append /etc/hosts > /dev/null
 
-#Downloading the AppD Agent
+#Create installation directory and move agent
 
 cd /var/tmp/
 mkdir appd-php
 cd /var/tmp/appd-php
+mv /var/tmp/$1 .
 
 #Unzip the AppD Agent
 
