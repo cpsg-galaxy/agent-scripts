@@ -25,7 +25,7 @@ mv /var/tmp/$1 .
 
 tar -xvjf $1
 
-cd appdynamics-php-agent
+cd appdynamics-php-agent-linux_x64
 chmod 777 logs/
 tiername=$5"_"$6
 sudo ./install.sh -s -a=$3  $2 443 $4 $tiername $7
