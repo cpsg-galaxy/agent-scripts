@@ -1,0 +1,52 @@
+#!/bin/bash
+
+#Reference userenv
+. /usr/local/osmosix/service/utils/agent_util.sh
+source /usr/local/osmosix/etc/userenv
+
+agentSendLogMessage "Installing AppDynamics Agent..."
+
+# Setting the script to exit immediately on any command failure
+set -e
+set -o pipefail
+
+# Add Host file entry for appd-controller
+
+sudo echo "$appd_controller	appd-controller" | sudo tee --append /etc/hosts > /dev/null
+
+#Downloading the AppD Agent
+
+cd /var/tmp/
+mkdir appd-php
+cd /var/tmp/appd-php
+
+sudo yum install wget -y
+wget https://s3.amazonaws.com/momagic/apps/composite_app/appdynamics-php-agent-x64-linux-4.3.5.0.tar.bz2;touch /tmp/appd-php/downloadagent.done &
+
+#Check if download is done then proceed to unzip the agent package
+
+while [ ! -f /tmp/appd-php/downloadagent.done ]
+	do
+	 sleep 10
+done
+
+tar -xvjf appdynamics-php-agent-x64-linux-4.3.5.0.tar.bz2
+
+cd appdynamics-php-agent
+chmod 777 logs/
+tiername=$cliqrAppTierName"_"$currentTierJobId
+sudo ./install.sh -s -a=customer1@$appd_access_key  $appd_controller 443 $parentJobName $tiername $cliqrNodeHostname
+#sudo ./install.sh -s -a=customer1@2418375f-721d-4904-b700-ba723b6812d9 64.100.255.181 443 CompositeApp WebFrontEnd $cliqrNodeHostname
+#sudo ./install.sh -s -a=customer1@48bf4bdc-eb15-43d9-ab27-64c9cd1e2e6c  173.38.117.237 443 140_AWS_CentOS CentOS_124 ec2-18-219-8-255.us-east-2.compute.amazonaws.com
+
+
+# Restart apache httpd
+
+sudo service httpd restart
+
+# Clean up the temporary file and the agent package file
+
+rm -rf /tmp/appd-php/downloadagent.done
+rm -rf /tmp/appd-php/appdynamics-php-agent-x64-linux-4.3.5.0.tar.bz2
+
+agentSendLogMessage "Installing AppDynamics Agent...done"
