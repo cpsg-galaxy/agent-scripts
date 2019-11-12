@@ -12,7 +12,7 @@ set -o pipefail
 
 # Add Host file entry for appd-controller
 
-sudo echo "$1	appd-controller" | sudo tee --append /etc/hosts > /dev/null
+sudo echo "$2	appd-controller" | sudo tee --append /etc/hosts > /dev/null
 
 #Downloading the AppD Agent
 
@@ -22,15 +22,12 @@ cd /var/tmp/appd-php
 
 #Unzip the AppD Agent
 
-tar -xvjf appdynamics-php-agent-x64-linux-4.3.5.0.tar.bz2
+tar -xvjf $1
 
 cd appdynamics-php-agent
 chmod 777 logs/
-tiername=$cliqrAppTierName"_"$currentTierJobId
-sudo ./install.sh -s -a=customer1@$appd_access_key  $1 443 $parentJobName $tiername $cliqrNodeHostname
-#sudo ./install.sh -s -a=customer1@2418375f-721d-4904-b700-ba723b6812d9 64.100.255.181 443 CompositeApp WebFrontEnd $cliqrNodeHostname
-#sudo ./install.sh -s -a=customer1@48bf4bdc-eb15-43d9-ab27-64c9cd1e2e6c  173.38.117.237 443 140_AWS_CentOS CentOS_124 ec2-18-219-8-255.us-east-2.compute.amazonaws.com
-
+tiername=$4"_"$5
+sudo ./install.sh -s -a=customer1@$appd_access_key  $2 443 $3 $tiername $6
 
 # Restart apache httpd
 
