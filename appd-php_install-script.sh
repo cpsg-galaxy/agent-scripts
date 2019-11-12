@@ -26,8 +26,8 @@ tar -xvjf $1
 
 cd appdynamics-php-agent
 chmod 777 logs/
-tiername=$4"_"$5
-sudo ./install.sh -s -a=customer1@$appd_access_key  $2 443 $3 $tiername $6
+tiername=$5"_"$6
+sudo ./install.sh -s -a=$3  $2 443 $4 $tiername $7
 
 # Restart apache httpd
 
