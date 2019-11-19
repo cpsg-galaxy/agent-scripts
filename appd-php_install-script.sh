@@ -26,8 +26,8 @@ tar -xvjf $1
 cd appdynamics-php-agent-linux_x64
 
 #Change permissions for the PHP and logs folders
-chmod -R 777 /appd-php
-chmod -R 777 /appd-php/logs
+chmod -R 777 /opt/appdynamics/appd-php
+chmod -R 777 /opt/appdynamics/appd-php/appdynamics-php-agent-linux_x64/logs
 
 #Install the appd-php agent
 ./install.sh -a=$3  $2 8090 $4 $tiername $7
